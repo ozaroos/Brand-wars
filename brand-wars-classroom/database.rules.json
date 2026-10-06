@@ -1,0 +1,52 @@
+{
+  "rules": {
+    "brandwarsExpansion": {
+      "$session": {
+        ".read": "auth != null",
+        "game": {
+          ".write": "auth != null && auth.uid === 'OnxZId4bEeTk5i4G2I8FhsJEhOY2'"
+        },
+        "teams": {
+          ".write": "auth != null && auth.uid === 'OnxZId4bEeTk5i4G2I8FhsJEhOY2'",
+          "$team": {
+            ".write": "auth != null && $team.matches(/^team([1-9]|1[0-5])$/) && !data.exists() && root.child('brandwarsExpansion').child($session).child('game').child('stage').val() <= 1 && newData.hasChildren(['name','generation']) && !newData.hasChild('submissions') && newData.child('generation').val() === root.child('brandwarsExpansion').child($session).child('game').child('generation').val()",
+            ".validate": "newData.hasChildren(['name','generation'])",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+            },
+            "generation": {
+              ".validate": "newData.isNumber()"
+            },
+            "submissions": {
+              "$round": {
+                ".write": "auth != null && $team.matches(/^team([1-9]|1[0-5])$/) && root.child('brandwarsExpansion').child($session).child('game').child('round').val() === $round && root.child('brandwarsExpansion').child($session).child('game').child('phase').val() === 'open' && root.child('brandwarsExpansion').child($session).child('game').child('running').val() === true && root.child('brandwarsExpansion').child($session).child('game').child('end').val() > now && newData.child('generation').val() === root.child('brandwarsExpansion').child($session).child('game').child('generation').val()",
+                ".validate": "newData.hasChild('generation') && ($round === '1' || ($round.matches(/^[2-7]$/) && newData.hasChild('plan')))",
+                "generation": {
+                  ".validate": "newData.isNumber() && newData.val() === root.child('brandwarsExpansion').child($session).child('game').child('generation').val()"
+                },
+                "pos": {
+                  ".validate": "$round === '1' && (newData.val() === 0 || newData.val() === 1 || newData.val() === 2)"
+                },
+                "nameId": {
+                  ".validate": "$round === '1' && newData.isNumber() && newData.val() % 1 === 0 && (($team === 'team1' && newData.val() >= 0 && newData.val() < 6) || ($team === 'team2' && newData.val() >= 6 && newData.val() < 12) || ($team === 'team3' && newData.val() >= 12 && newData.val() < 18) || ($team === 'team4' && newData.val() >= 18 && newData.val() < 24) || ($team === 'team5' && newData.val() >= 24 && newData.val() < 30) || ($team === 'team6' && newData.val() >= 30 && newData.val() < 36) || ($team === 'team7' && newData.val() >= 36 && newData.val() < 42) || ($team === 'team8' && newData.val() >= 42 && newData.val() < 48) || ($team === 'team9' && newData.val() >= 48 && newData.val() < 54) || ($team === 'team10' && newData.val() >= 54 && newData.val() < 60) || ($team === 'team11' && newData.val() >= 60 && newData.val() < 66) || ($team === 'team12' && newData.val() >= 66 && newData.val() < 72) || ($team === 'team13' && newData.val() >= 72 && newData.val() < 78) || ($team === 'team14' && newData.val() >= 78 && newData.val() < 84) || ($team === 'team15' && newData.val() >= 84 && newData.val() < 90) || ($team === 'bot0' && newData.val() >= 90 && newData.val() < 96) || ($team === 'bot1' && newData.val() >= 96 && newData.val() < 102) || ($team === 'bot2' && newData.val() >= 102 && newData.val() < 108) || ($team === 'bot3' && newData.val() >= 108 && newData.val() < 114) || ($team === 'bot4' && newData.val() >= 114 && newData.val() < 120) || ($team === 'bot5' && newData.val() >= 120 && newData.val() < 126))"
+                },
+                "$other": {
+                  ".validate": false
+                },
+                "plan": {
+                  ".validate": "$round !== '1' && newData.hasChildren(['0','1','2','3','4','5','6','7']) && (newData.child('0').val() + newData.child('1').val() + newData.child('2').val() + newData.child('3').val() + newData.child('4').val() + newData.child('5').val() + newData.child('6').val() + newData.child('7').val()) <= 25 && ((newData.child('0').val() > 0 ? 1 : 0) + (newData.child('1').val() > 0 ? 1 : 0) + (newData.child('2').val() > 0 ? 1 : 0) + (newData.child('3').val() > 0 ? 1 : 0) + (newData.child('4').val() > 0 ? 1 : 0) + (newData.child('5').val() > 0 ? 1 : 0) + (newData.child('6').val() > 0 ? 1 : 0) + (newData.child('7').val() > 0 ? 1 : 0)) <= 4",
+                  "$i": {
+                    ".validate": "$i.matches(/^[0-7]$/) && newData.isNumber() && (newData.val() === 0 || newData.val() === 5 || newData.val() === 10 || newData.val() === 15)"
+                  }
+                }
+              }
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    }
+  }
+}
